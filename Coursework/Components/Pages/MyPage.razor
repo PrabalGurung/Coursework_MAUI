@@ -1,22 +1,19 @@
 ﻿@page "/MyPage"
 @rendermode InteractiveServer
 
-<h1>Aman ko paisa herni ho!?</h1>
-<h2>heheehehhe</h2>
-
-<p role="status">name: @_name</p>
-<p role="status">balance: @_balance</p>
+<p role="status">name: @ac._name</p>
+<p role="status">balance: @ac._balance</p>
 
 <p>eta achadyo vanni no going back hai :3</p>
 
 <div>
     <label for="nameInput">Enter your name:</label>
-    <input id="nameInput" type="text" @bind="_name" class="form-control" />
+    <input id="nameInput" type="text" @bind="ac._name" class="form-control" />
 </div>
 
 <div>
     <label for="balanceInput">Enter your balance:</label>
-    <input id="balanceInput" type="number" @bind="_balance" class="form-control" />
+    <input id="balanceInput" type="number" @bind="ac._balance" class="form-control" />
 </div>
 
 <button class="btn btn-primary" @onclick="OnClick">Set Name and Balance</button>
@@ -25,23 +22,20 @@
 <button class="btn btn-primary" @onclick="AddMoney">Prabal le paisa diyo cause im great</button>
 
 @code {
-    public string _name;
-    public int _balance;
+    Add_Account ac = new Add_Account();
 
     public void OnClick()
     {
-        StateHasChanged();  
+        StateHasChanged();
     }
 
     public void AddMoney()
     {
-        _balance += 10000;
-        StateHasChanged(); 
+        ac._balance += 10000;
     }
 
     public void DecreaseMoney()
     {
-        _balance -= 10000;
-        StateHasChanged();  
+        ac._balance -= 10000;
     }
 }

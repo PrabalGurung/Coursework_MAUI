@@ -1,0 +1,40 @@
+﻿@page "/CashInflows"
+@rendermode InteractiveServer
+
+<div class="cashinflow-form">
+	<h2>CashInflows</h2>
+	<input class="input-field" type="text" @bind="_balance" placeholder="Username" required>
+	<input class="input-field" type="text" @bind="_source" placeholder="Source" required>
+	<input class="input-field" type="date" @bind="_date" placeholder="Date" required>
+	<select @bind="_type">
+		@foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Inflow)))
+		{
+			<option value="@cashInflow">@cashInflow</option>
+		}
+	</select>
+	<button class="submit-btn" @onclick="OnClick" type="submit">Add Inflow</button>
+</div>
+<p role="status">Current count: @Current_Account._currentAccount._balance</p>
+<p role="status">Local balance: @_balance</p>
+
+@if (!string.IsNullOrEmpty(message))
+{
+	<div class="error-message">@message</div>
+}
+
+@code {
+	public int _balance;
+	public string _source;
+	public DateOnly _date;
+
+	public string message;
+
+	public option.Cash_Inflow _type = option.Cash_Inflow.Credit;
+
+	public void OnClick()
+	{
+		Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date));
+		message = "added successfully";
+	}
+}
+

@@ -1,0 +1,28 @@
+﻿@page "/Debt"
+@rendermode InteractiveServer
+
+<h3>Debt</h3>
+<input class="input-field" type="text" @bind="_amount" placeholder="Debt" required>
+<select @bind="_status">
+	@foreach (var stat in Enum.GetNames(typeof(option.Debt)))
+	{
+		<option value="@stat">@stat</option>
+	}
+</select>
+<input class="input-field" type="date" @bind="_date" placeholder="date" required>
+<input class="input-field" type="text" @bind="_source" placeholder="source" required>
+
+<button class="submit-btn" @onclick="OnClick" type="submit">Add Inflow</button>
+@code {
+	public int _amount;
+	public DateOnly _date;
+	public string _source;
+	public bool success;
+
+	option.Debt _status = option.Debt.pending;
+
+	public void OnClick()
+	{
+		success = Current_Account._currentAccount.History(new Transaction(_amount, _status, _source, _date));
+	}
+}

@@ -1,0 +1,39 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>SignUp</PageTitle>
+
+<div class="signup-form">
+	<h2>Sign Up</h2>
+	<input class="input-field" type="text" @bind="_username" placeholder="Username" required>
+	<input class="input-field" type="password" @bind="_password" placeholder="Password" required>
+	<button class="submit-btn" @onclick="OnClick" type="submit">Sign Up</button>
+
+	@if (!string.IsNullOrEmpty(_errorMessage))
+	{
+		<div class="error-message">@_errorMessage</div>
+	}
+</div>
+
+@code {
+	@inject NavigationManager Navigation
+	
+	public string _username;
+	public string _password;
+
+	public string _errorMessage;
+
+	public void OnClick()
+	{
+		if (string.Equals(_username, "Skybird") && string.Equals(_password, "123"))
+		{
+			LogIn.log = true;
+			Current_Account._currentAccount = new Add_Account(_username, 10000);
+			Navigation.NavigateTo("/Home");
+		}
+		else
+		{
+			_errorMessage = "Incorrect username or password.";
+		}
+	}
+}
