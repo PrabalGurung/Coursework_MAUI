@@ -4,15 +4,17 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class Transaction
 {
-    public int _balance;
-    public option.Cash_Inflow _inflowType;
-    public option.Cash_Outflow _outflowType;
-    public option.Debt _debt;
-    public string _source;
-    public DateOnly _date;
-    public int _used;
+    public int _balance { get; set; }
+    public option.Cash_Inflow _inflowType { get; set; }
+	public option.Cash_Outflow _outflowType { get; set; }
+	public string _debt { get; set; }
+	public string _source { get; set; }
+	public DateOnly _date { get; set; }
+	public int _used { get; set; }
 
-    public Transaction(int balance, option.Cash_Inflow type ,string source, DateOnly date)
+	public Transaction() { }
+
+	public Transaction(int balance, option.Cash_Inflow type ,string source, DateOnly date)
     {
         _balance = balance;
 		_inflowType = type;
@@ -28,7 +30,7 @@ public class Transaction
 		_date = date;
 	}
 
-    public Transaction(int balance, option.Debt debt, string source, DateOnly date)
+    public Transaction(int balance, string debt, string source, DateOnly date)
     {
         _balance = balance;
         _debt = debt;
@@ -36,4 +38,3 @@ public class Transaction
         _source = source;
     }
 }
-

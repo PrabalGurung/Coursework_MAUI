@@ -2,4 +2,3 @@
 {
     public static bool log = false;
 }
-

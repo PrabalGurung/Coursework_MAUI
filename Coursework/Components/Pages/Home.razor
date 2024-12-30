@@ -1,12 +1,15 @@
 ﻿@page "/Home"
+@rendermode InteractiveServer
+
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 <h3>Welcome, @Current_Account._currentAccount._name</h3>
 <p>Your Current Balance: @Current_Account._currentAccount._balance</p>
 
+<button class="submit-btn" @onclick="SortDate" type="submit">Sort Date</button>
 
-@if (Current_Account._currentAccount._transaction != null && Current_Account._currentAccount._transaction.Count > 0)
+@if (Current_Account._currentAccount._transaction.Count > 0)
 {
     <table border="1">
         <tr>
@@ -15,17 +18,17 @@
             <td> Inflow</td>
             <td> OutFlow</td>
             <td> Debt</td>
-            <td> Paid/Used</td>
+            <td> Outstanding Amount</td>
         </tr>
         @foreach (var transaction in Current_Account._currentAccount._transaction)
         {
             <tr>
                 <td>@transaction._balance</td>
                 <td>@transaction._date</td>
-                @if(transaction._inflowType != option.Cash_Inflow.Choose)
+                @if(transaction._inflowType != option.Cash_Inflow.choose)
                 {
                     <td>@transaction._inflowType</td>
-                    <td>--</td>
+                    <td>--</td>              
                     <td>--</td>
 
                     TotalInFlow(transaction._balance);
@@ -88,5 +91,13 @@ else
     public void Tran()
     {
         trans = totalInflow + totalDebt - totalOutflow;
+    }
+
+    public void SortDate()
+    {
+        Console.WriteLine("axa");
+        Current_Account.DropTable();
+        Database_Selection database_Selection = new Database_Selection();
+        database_Selection.GetDate(1);
     }
 }

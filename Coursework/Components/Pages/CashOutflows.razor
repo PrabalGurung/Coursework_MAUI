@@ -34,6 +34,7 @@
 	public void OnClick()
 	{
 		success = Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date));
+		Current_Account._currentAccount.UpdateBalance();
 		if (success)
 		{
 			message = "added successfully";
@@ -41,5 +42,6 @@
 		{
 			message = "insufficient balance";
 		}
+		Current_Account.DatabaseExtraction();
 	}
 }

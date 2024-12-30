@@ -28,12 +28,18 @@
 		if (string.Equals(_username, "Skybird") && string.Equals(_password, "123"))
 		{
 			LogIn.log = true;
-			Current_Account._currentAccount = new Add_Account(_username, 10000);
+			Current_Account._currentAccount = new Finance_Handler(_username, 10000);
 			Navigation.NavigateTo("/Home");
+			Initializer create_Table = new Initializer();
+			create_Table.CheckDatabase();
+			Current_Account.DatabaseExtraction();
+			Current_Account._currentAccount.UpdateBalance();
 		}
 		else
 		{
 			_errorMessage = "Incorrect username or password.";
 		}
 	}
+
+
 }

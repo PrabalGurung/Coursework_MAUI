@@ -27,14 +27,16 @@
 	public string _source;
 	public DateOnly _date;
 
-	public string message;
+	public string message; 
 
 	public option.Cash_Inflow _type = option.Cash_Inflow.Credit;
 
 	public void OnClick()
 	{
 		Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date));
+		Current_Account._currentAccount.UpdateBalance();
 		message = "added successfully";
+		Current_Account.DatabaseExtraction();
 	}
 }
 

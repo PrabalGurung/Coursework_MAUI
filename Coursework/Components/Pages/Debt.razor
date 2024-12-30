@@ -4,10 +4,8 @@
 <h3>Debt</h3>
 <input class="input-field" type="text" @bind="_amount" placeholder="Debt" required>
 <select @bind="_status">
-	@foreach (var stat in Enum.GetNames(typeof(option.Debt)))
-	{
-		<option value="@stat">@stat</option>
-	}
+	<option value="Pending">Pending</option>
+	<option value="Cleared">Cleared</option>
 </select>
 <input class="input-field" type="date" @bind="_date" placeholder="date" required>
 <input class="input-field" type="text" @bind="_source" placeholder="source" required>
@@ -18,11 +16,13 @@
 	public DateOnly _date;
 	public string _source;
 	public bool success;
-
-	option.Debt _status = option.Debt.pending;
+	public string _status = "Pending";
 
 	public void OnClick()
 	{
+		Console.WriteLine(_status);
 		success = Current_Account._currentAccount.History(new Transaction(_amount, _status, _source, _date));
+		Current_Account._currentAccount.UpdateBalance();
+		Current_Account.DatabaseExtraction();
 	}
 }

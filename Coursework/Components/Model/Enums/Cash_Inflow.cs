@@ -3,7 +3,7 @@ namespace option
 {
     public enum Cash_Inflow
     {
-        Choose,
+        choose,
         Credit,
         Gain,
         Budget
