@@ -25,14 +25,14 @@ public class Finance_Handler
 
 		if (t._debt != null )
 		{
-			dm.InsertDebt(1, t._balance, t._source, t._date.ToString(), t._debt.ToString());
+			dm.InsertDebt(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._debt.ToString(), t._index, t._description);
 			return true;
 		}
 		else
 		{
 			if (t._outflowType == _type)
 			{
-				int iflowId = dm.InsertInflow(1, t._balance, t._source, t._date.ToString(), t._inflowType.ToString());
+				int iflowId = dm.InsertInflow(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._inflowType.ToString(), t._index, t._description);
 				DebtTrack(t._balance, iflowId);
 				return true;
 			}
@@ -42,7 +42,7 @@ public class Finance_Handler
 				{
 					Database_Manager database_Manager = new Database_Manager();
 					database_Manager.DecreaseBalance(1, t._balance);
-					dm.InsertOutflow(1, t._balance, t._source, t._date.ToString(), t._outflowType.ToString());
+					dm.InsertOutflow(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._outflowType.ToString(), t._index, t._description);
 					return true;
 				}
 				else
@@ -91,5 +91,11 @@ public class Finance_Handler
 	{
 		Debt_Manager debt_Manager = new Debt_Manager();
 		debt_Manager.Debt_Collector(amount, 1, inflowId);
+	}
+
+	public void AddTag(Transaction t)
+	{
+		Database_Manager dm = new Database_Manager();
+		dm.AddTags(t._tags);
 	}
 }

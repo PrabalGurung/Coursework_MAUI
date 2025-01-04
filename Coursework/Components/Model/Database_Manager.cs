@@ -58,9 +58,9 @@ public class Database_Manager
 		}
 	}
 
-	public int InsertInflow(int userId, int amount, string source, string date, string type)
+	public int InsertInflow(int userId, int amount, string source, string date, string type, int index, string description)
 	{
-		string query = "INSERT INTO inflows (userId, amount, source, date, type) VALUES (@userId, @amount, @source, @date, @type)";
+		string query = "INSERT INTO inflows (userId, amount, source, date, type, tagId, description) VALUES (@userId, @amount, @source, @date, @type, @tagId, @description)";
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
 			cmd.Parameters.AddWithValue("@userId", userId);
@@ -68,6 +68,8 @@ public class Database_Manager
 			cmd.Parameters.AddWithValue("@source", source);
 			cmd.Parameters.AddWithValue("@date", date);
 			cmd.Parameters.AddWithValue("@type", type);
+			cmd.Parameters.AddWithValue("@tagId", index);
+			cmd.Parameters.AddWithValue("@description", description);
 			cmd.ExecuteNonQuery();
 		}
 		long lastInsertId = _connection.LastInsertRowId;
@@ -75,9 +77,9 @@ public class Database_Manager
 		return (int)lastInsertId;
 	}
 
-	public void InsertOutflow(int userId, int amount, string source, string date, string type)
+	public void InsertOutflow(int userId, int amount, string source, string date, string type, int index, string description)
 	{
-		string query = "INSERT INTO outflows (userId, amount, source, date, type) VALUES (@userId, @amount, @source, @date, @type)";
+		string query = "INSERT INTO outflows (userId, amount, source, date, type, tagId, description) VALUES (@userId, @amount, @source, @date, @type, @tagId, @description)";
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
 			cmd.Parameters.AddWithValue("@userId", userId);
@@ -85,13 +87,15 @@ public class Database_Manager
 			cmd.Parameters.AddWithValue("@source", source);
 			cmd.Parameters.AddWithValue("@date", date);
 			cmd.Parameters.AddWithValue("@type", type);
+			cmd.Parameters.AddWithValue("@tagId", index);
+			cmd.Parameters.AddWithValue("@description", description);
 			cmd.ExecuteNonQuery();
 		}
 	}
 
-	public void InsertDebt(int userId, int amount, string source, string date, string type)
+	public void InsertDebt(int userId, int amount, string source, string date, string type, int index, string description)
 	{
-		string query = "INSERT INTO debts (userId, outstanding_amount, amount, source, date, type) VALUES (@userId, @outstanding_amount, @amount, @source, @date, @type)";
+		string query = "INSERT INTO debts (userId, outstanding_amount, amount, source, date, type, tagId, description) VALUES (@userId, @outstanding_amount, @amount, @source, @date, @type, @tagId, @description)";
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
 			cmd.Parameters.AddWithValue("@userId", userId);
@@ -100,6 +104,8 @@ public class Database_Manager
 			cmd.Parameters.AddWithValue("@source", source);
 			cmd.Parameters.AddWithValue("@date", date);
 			cmd.Parameters.AddWithValue("@type", type);
+			cmd.Parameters.AddWithValue("@tagId", index);
+			cmd.Parameters.AddWithValue("@description", description);
 			cmd.ExecuteNonQuery();
 		}
 	}
@@ -113,6 +119,16 @@ public class Database_Manager
 			cmd.Parameters.AddWithValue("@clearedAmount", inflowAmount);
 			cmd.Parameters.AddWithValue("@type", newType);
 			cmd.Parameters.AddWithValue("@debtId", debtId);
+			cmd.ExecuteNonQuery();
+		}
+	}
+
+	public void AddTags(string name)
+	{
+		string query = "INSERT INTO tags (name) VALUES (@name)";
+		using (var cmd = new SQLiteCommand(query, _connection))
+		{
+			cmd.Parameters.AddWithValue("@name", name);
 			cmd.ExecuteNonQuery();
 		}
 	}

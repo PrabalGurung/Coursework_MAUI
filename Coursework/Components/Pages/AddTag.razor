@@ -1,0 +1,16 @@
+﻿@page "/AddTag"
+@rendermode InteractiveServer
+
+<h3>Add Tag</h3>
+
+<input class="input-field" type="text" @bind="_name" placeholder="Tag Name" required>
+<button class="submit-btn" @onclick="OnClick" type="submit">Add Tag</button>
+
+@code {
+	string _name;
+
+	public void OnClick()
+	{
+		Current_Account._currentAccount.AddTag(new Transaction(_name));
+	}
+}

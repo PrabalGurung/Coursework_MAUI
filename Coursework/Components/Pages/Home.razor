@@ -7,6 +7,38 @@
 <h3>Welcome, @Current_Account._currentAccount._name</h3>
 <p>Your Current Balance: @Current_Account._currentAccount._balance</p>
 
+<button class="submit-btn" @onclick="AdvanceSearch" type="submit">Advance Search</button>
+@if (advanceSearch)
+{
+    <input class="input-field" type="date" @bind="initialDate" placeholder="Date">
+    <input class="input-field" type="date" @bind="finalDate" placeholder="Date">
+
+    <select @bind="_typeInflow">
+        @foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Inflow)))
+        {
+            <option value="@cashInflow">@cashInflow</option>
+        }
+    </select>
+
+    <select @bind="_typeOutflow">
+        @foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Outflow)))
+        {
+            <option value="@cashInflow">@cashInflow</option>
+        }
+    </select>
+
+    <select @bind="_status">
+        <option>Pending</option>
+        <option>Cleared</option>
+    </select>
+
+    <select @bind="_order">
+        <option>date</option>
+        <option>source</option>
+    </select>
+    <button class="submit-btn" @onclick="filter" type="submit">Advance Search</button>
+}
+
 <button class="submit-btn" @onclick="SortDate" type="submit">Sort Date</button>
 
 @if (Current_Account._currentAccount._transaction.Count > 0)
@@ -73,6 +105,17 @@ else
     int totalDebt;
     int trans;
 
+    string _status;
+    string _order;
+
+    DateOnly initialDate;
+    DateOnly finalDate;
+
+    bool advanceSearch = false;
+
+    public option.Cash_Outflow _typeOutflow = option.Cash_Outflow.debit;
+    public option.Cash_Inflow _typeInflow = option.Cash_Inflow.Credit;
+
     public void TotalInFlow(int balance)
     {
         totalInflow += balance;
@@ -97,7 +140,27 @@ else
     {
         Console.WriteLine("axa");
         Current_Account.DropTable();
-        Database_Selection database_Selection = new Database_Selection();
-        database_Selection.GetDate(1);
+        Current_Account.SortDate(1);
+    }
+
+    public void AdvanceSearch()
+    {
+        if (advanceSearch == false)
+        {
+            advanceSearch = true;
+        } 
+        else
+        {
+            advanceSearch = false;
+        }
+    }
+
+    public void filter()
+    {
+        Console.WriteLine(initialDate);
+        Console.WriteLine("axa");
+        Current_Account.DropTable();
+        Current_Account.Filter(1, initialDate, finalDate, _typeInflow.ToString(), _typeOutflow.ToString(), _status, "", _order);
+        Console.WriteLine("sakyo");
     }
 }

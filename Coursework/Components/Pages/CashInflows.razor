@@ -12,6 +12,14 @@
 			<option value="@cashInflow">@cashInflow</option>
 		}
 	</select>
+	<select @bind="_tag">
+		@for (int i = 0; i < Current_Account._tags.Count; i++)
+		{
+			<option value="@i">@Current_Account._tags[i]._tags</option>
+		}
+	</select>
+	<input class="input-field" type="text" @bind="_note" placeholder="Date">
+
 	<button class="submit-btn" @onclick="OnClick" type="submit">Add Inflow</button>
 </div>
 <p role="status">Current count: @Current_Account._currentAccount._balance</p>
@@ -26,6 +34,8 @@
 	public int _balance;
 	public string _source;
 	public DateOnly _date;
+	public int _tag;
+	public string _note;
 
 	public string message; 
 
@@ -33,9 +43,9 @@
 
 	public void OnClick()
 	{
-		Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date));
+		Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date, _tag, _note));
 		Current_Account._currentAccount.UpdateBalance();
-		message = "added successfully";
+		message = _tag.ToString();
 		Current_Account.DatabaseExtraction();
 	}
 }

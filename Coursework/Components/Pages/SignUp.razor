@@ -1,5 +1,6 @@
 ﻿@page "/"
 @rendermode InteractiveServer
+@inject NavigationManager Navigation
 
 <PageTitle>SignUp</PageTitle>
 
@@ -11,13 +12,12 @@
 
 	@if (!string.IsNullOrEmpty(_errorMessage))
 	{
-		<div class="error-message">@_errorMessage</div>
+			<div class="error-message">@_errorMessage</div>
 	}
 </div>
 
-@code {
-	@inject NavigationManager Navigation
-	
+@code 
+{
 	public string _username;
 	public string _password;
 
@@ -34,12 +34,11 @@
 			create_Table.CheckDatabase();
 			Current_Account.DatabaseExtraction();
 			Current_Account._currentAccount.UpdateBalance();
+			Current_Account.Tags();
 		}
 		else
 		{
 			_errorMessage = "Incorrect username or password.";
 		}
 	}
-
-
 }

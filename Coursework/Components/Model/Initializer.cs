@@ -30,7 +30,7 @@ public class Initializer
                 name TEXT NOT NULL,
                 password TEXT NOT NULL,
 				balance INTEGER
-            );";
+            );"; 
 
 		string createInflowQuery = @"
             CREATE TABLE inflows (
@@ -38,9 +38,12 @@ public class Initializer
 				userId INTEGER,
 				amount INTEGER NOT NULL,
 				source TEXT NOT NULL,
-				date TEXT NOT NULL,
+				date DATE NOT NULL,
 				type TEXT NOT NULL,
-				FOREIGN KEY (userId) REFERENCES user(id)
+				tagId INTEGER,
+				description TEXT,
+				FOREIGN KEY (userId) REFERENCES users(id)
+				FOREIGN KEY (tagId) REFERENCES tags(id)
             );";
 
 		string createOutflowQuery = @"
@@ -49,9 +52,12 @@ public class Initializer
 				userId INTEGER,
 				amount INTEGER NOT NULL,
 				source TEXT NOT NULL,
-				date TEXT NOT NULL,
-				type TEXT NOT NULL,
+				date DATE NOT NULL,
+				type TEXT NOT NULL,				
+				tagId INTEGER,
+				description TEXT,
 				FOREIGN KEY (userId) REFERENCES user(id)
+				FOREIGN KEY (tagId) REFERENCES tags(id)
             );";
 
 		string createDebtQuery = @"
@@ -61,9 +67,12 @@ public class Initializer
 				amount INTEGER NOT NULL,
 				outstanding_amount INTEGER NOT NULL,
 				source TEXT NOT NULL,
-				date TEXT NOT NULL,
+				date DATE NOT NULL,
 				type TEXT NOT NULL,
+				tagId INTEGER,
+				description TEXT,
 				FOREIGN KEY (userId) REFERENCES user(id)
+				FOREIGN KEY (tagId) REFERENCES tags(id)
             );";
 
 		string createDUQuery = @"
@@ -77,6 +86,12 @@ public class Initializer
 				FOREIGN KEY (debtId) REFERENCES debt(id)
 				FOREIGN KEY (inflowId) REFERENCES inflow(id)
 		);";
+
+		string createTags = @"
+		CREATE TABLE tags (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			name TEXT);
+		";
 
 		using (SQLiteConnection connection = new SQLiteConnection(connectionString))
 		{
@@ -105,8 +120,12 @@ public class Initializer
 			{
 				command.ExecuteNonQuery();
 			}
+            using (SQLiteCommand command = new SQLiteCommand(createTags, connection))
+            {
+                command.ExecuteNonQuery();
+            }
 
-			connection.Close();
+            connection.Close();
 		}
 	}
 

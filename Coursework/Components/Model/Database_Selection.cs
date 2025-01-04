@@ -142,6 +142,25 @@ public class Database_Selection
 		}
 	}
 
+	public void GetTags()
+	{
+		string query = "SELECT name FROM tags";
+
+		using (var cmd = new SQLiteCommand(query, _connection))
+		{
+			using (var reader = cmd.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					Current_Account._tags.Add(new Transaction
+					{
+						_tags = reader.GetString(0)
+					});
+				}
+			}
+		}
+	}
+
 	public void Close()
 	{
 		_connection.Close();

@@ -11,30 +11,45 @@ public class Transaction
 	public string _source { get; set; }
 	public DateOnly _date { get; set; }
 	public int _used { get; set; }
+	public string _description { get; set; }
+	public string _tags { get; set; }
+	public int _index {  get; set; }
 
 	public Transaction() { }
 
-	public Transaction(int balance, option.Cash_Inflow type ,string source, DateOnly date)
+	public Transaction(int balance, option.Cash_Inflow type ,string source, DateOnly date, int tags, string _notes)
     {
         _balance = balance;
 		_inflowType = type;
         _source = source;
         _date = date;
+		_index = tags;
+		_description = _notes;
     }
 
-	public Transaction(int balance, option.Cash_Outflow type, string source, DateOnly date)
+	public Transaction(int balance, option.Cash_Outflow type, string source, DateOnly date, int tags, string _notes)
 	{
 		_balance = balance;
 		_outflowType = type;
 		_source = source;
 		_date = date;
+		_index = tags;
+		_description = _notes;
 	}
 
-    public Transaction(int balance, string debt, string source, DateOnly date)
+    public Transaction(int balance, string debt, string source, DateOnly date, int tags, string notes)
     {
         _balance = balance;
         _debt = debt;
         _date = date;
         _source = source;
+		_index = tags;
+		_description = notes;
     }
+
+	public Transaction(string tags)
+	{
+		_tags = tags;
+	}
+
 }

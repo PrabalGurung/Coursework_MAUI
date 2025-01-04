@@ -9,6 +9,13 @@
 </select>
 <input class="input-field" type="date" @bind="_date" placeholder="date" required>
 <input class="input-field" type="text" @bind="_source" placeholder="source" required>
+<select @bind="_tag">
+	@for (int i = 0; i < Current_Account._tags.Count; i++)
+	{
+		<option value="@i">@Current_Account._tags[i]._tags</option>
+	}
+</select>
+<input class="input-field" type="text" @bind="_note" placeholder="Date">
 
 <button class="submit-btn" @onclick="OnClick" type="submit">Add Inflow</button>
 @code {
@@ -17,11 +24,13 @@
 	public string _source;
 	public bool success;
 	public string _status = "Pending";
+	public int _tag;
+	public string _note;
 
 	public void OnClick()
 	{
 		Console.WriteLine(_status);
-		success = Current_Account._currentAccount.History(new Transaction(_amount, _status, _source, _date));
+		success = Current_Account._currentAccount.History(new Transaction(_amount, _status, _source, _date, _tag, _note));
 		Current_Account._currentAccount.UpdateBalance();
 		Current_Account.DatabaseExtraction();
 	}
