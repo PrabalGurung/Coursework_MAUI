@@ -4,6 +4,7 @@ public class Current_Account
 {
 	public static Finance_Handler _currentAccount { get; set; }
     public static List<Transaction> _tags { get; set; } = new List<Transaction>();
+    
 
     public static void DatabaseExtraction()
     {
@@ -36,5 +37,5 @@ public class Current_Account
     {
         Database_Selection ds = new Database_Selection();
         ds.GetTags();
-    }
+    }       
 }

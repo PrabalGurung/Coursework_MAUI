@@ -41,7 +41,7 @@ public class Initializer
 				date DATE NOT NULL,
 				type TEXT NOT NULL,
 				tagId INTEGER,
-				description TEXT,
+				description    TEXT,
 				FOREIGN KEY (userId) REFERENCES users(id)
 				FOREIGN KEY (tagId) REFERENCES tags(id)
             );";
@@ -98,7 +98,7 @@ public class Initializer
 			connection.Open();
 
 			using (SQLiteCommand command = new SQLiteCommand(createUserQuery, connection))
-			{
+			{	
 				command.ExecuteNonQuery();
 			}
 
