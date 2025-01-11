@@ -25,9 +25,9 @@
 <p role="status">Current count: @Current_Account._currentAccount._balance</p>
 <p role="status">Local balance: @_balance</p>
 
-@if (!string.IsNullOrEmpty(message))
+@if (!string.IsNullOrEmpty(_message))
 {
-	<div class="error-message">@message</div>
+	<div class="error-message">@_message</div>
 }
 
 @code {
@@ -37,7 +37,7 @@
 	public int _tag;
 	public string _note;
 
-	public string message; 
+	public string _message; 
 
 	public option.Cash_Inflow _type = option.Cash_Inflow.Credit;
 
@@ -45,7 +45,7 @@
 	{
 		Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date, _tag, _note));
 		Current_Account._currentAccount.UpdateBalance();
-		message = _tag.ToString();
+		_message = "Successfully Added";
 		Current_Account.DatabaseExtraction();
 	}
 }

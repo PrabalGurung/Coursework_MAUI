@@ -7,19 +7,6 @@
 <h3>Welcome, @Current_Account._currentAccount._name</h3>
 <p>Your Current Balance: @Current_Account._currentAccount._balance</p>
 
-<h3>Inflow</h3>
-<label>@highestInflow</label>
-<label>@lowestInflow</label>
-
-<h3>Outflow</h3>
-<label>@highestOutflow</label>
-<label>@lowestOutflow</label>
-
-<h3>Debt</h3>
-<label>@highestDebt</label>
-<label>@lowestDebt</label>
-<br/>
-
 <button class="submit-btn" @onclick="AdvanceSearch" type="submit">Advance Search</button>
 @if (advanceSearch)
 {
@@ -59,7 +46,7 @@
 		<option>date</option>
 		<option>source</option>
 	</select>
-	<button class="submit-btn" @onclick="filter" type="submit">Advance Search</button>
+	<button class="submit-btn" @onclick="filter" type="submit">Filter/Sort Search</button>
 }
 
 <button class="submit-btn" @onclick="SortDate" type="submit">Sort Date</button>
@@ -130,6 +117,19 @@ else
 	<p>No transactions available.</p>
 }
 
+<h3>Inflow</h3>
+<label>@highestInflow</label>
+<label>@lowestInflow</label>
+
+<h3>Outflow</h3>
+<label>@highestOutflow</label>
+<label>@lowestOutflow</label>
+
+<h3>Debt</h3>
+<label>@highestDebt</label>
+<label>@lowestDebt</label>
+<br />
+
 <h4>Debt History</h4>
 @if (Current_Account._currentAccount._transaction.Count > 0)
 {
@@ -168,9 +168,9 @@ else
 	int highestInflow = 0;
 	int lowestInflow = 1000000;
 	int highestOutflow = 0;
-	int lowestOutflow = 100000;
+	int lowestOutflow = 1000000;
 	int highestDebt = 0;
-	int lowestDebt = 10000;
+	int lowestDebt = 1000000;
 
 	string _title;
 	string _status;
@@ -265,7 +265,6 @@ else
 		totalInflow = 0;
 		totalOutflow = 0;
 		totalDebt = 0;
-		Console.WriteLine(initialDate);
 		Current_Account.DropTable();
 		Current_Account.Filter(1, initialDate, finalDate, _typeInflow.ToString(), _typeOutflow.ToString(), _status, _tag, _order);
 	}

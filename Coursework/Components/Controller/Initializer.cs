@@ -18,6 +18,7 @@ public class Initializer
 			CreateTable();
 			Database_Manager dm = new Database_Manager();
 			dm.InsertUser("Skybird", "123", 0);
+			dm.InsertDefaultTags();
 			dm.Close();
 		}
 	}

@@ -12,10 +12,9 @@ public class Finance_Handler
 	{
 	}
 
-	public Finance_Handler(string name, int balance)
+	public Finance_Handler(string name)
 	{
 		_name = name;
-		_balance = balance;
 	}
 
 	public bool History(Transaction t)

@@ -20,15 +20,16 @@
 	</select>
 	<input class="input-field" type="text" @bind="_note" placeholder="Note">
 
-	<button class="submit-btn" @onclick="OnClick" type="submit">Add Inflow</button>
+	<button class="submit-btn" @onclick="OnClick" type="submit">Add Outflow</button>
 </div>
 <p role="status">Current count: @Current_Account._currentAccount._balance</p>
 <p role="status">Local balance: @_balance</p>
 
-@if (!string.IsNullOrEmpty(message))
+@if (!string.IsNullOrEmpty(_message))
 {
-	<div class="message">@message</div>
+	<div class="message">@_message</div>
 }
+
 @code {
 	public int _balance;
 	public string _source;
@@ -37,7 +38,7 @@
 	public string _note;
 
 	public bool success;
-	public string message;
+	public string _message;
 
 	public option.Cash_Outflow _type = option.Cash_Outflow.debit;
 
@@ -47,10 +48,10 @@
 		Current_Account._currentAccount.UpdateBalance();
 		if (success)
 		{
-			message = "added successfully";
+			_message = "added successfully";
 		} else
 		{
-			message = "insufficient balance";
+			_message = "insufficient balance";
 		}
 		Current_Account.DatabaseExtraction();
 	}

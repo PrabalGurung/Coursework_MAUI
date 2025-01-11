@@ -3,10 +3,6 @@
 
 <h3>Debt</h3>
 <input class="input-field" type="text" @bind="_amount" placeholder="Debt" required>
-<select @bind="_status">
-	<option value="Pending">Pending</option>
-	<option value="Cleared">Cleared</option>
-</select>
 <input class="input-field" type="date" @bind="_date" placeholder="date" required>
 <input class="input-field" type="text" @bind="_source" placeholder="source" required>
 <select @bind="_tag">
@@ -17,7 +13,13 @@
 </select>
 <input class="input-field" type="text" @bind="_note" placeholder="note">
 
-<button class="submit-btn" @onclick="OnClick" type="submit">Add Inflow</button>
+<button class="submit-btn" @onclick="OnClick" type="submit">Add Debt</button>
+
+@if (!string.IsNullOrEmpty(_message))
+{
+	<div class="message">@_message</div>
+}
+
 @code {
 	public int _amount;
 	public DateOnly _date;
@@ -27,11 +29,18 @@
 	public int _tag;
 	public string _note;
 
+	string _message;
+
 	public void OnClick()
 	{
-		Console.WriteLine(_status);
-		Console.WriteLine("Tag: " + _tag);
 		success = Current_Account._currentAccount.History(new Transaction(_amount, _status, _source, _date, _tag, _note));
+		if (success)
+		{
+			_message = "Added Successfully";
+		} else
+		{
+			_message = "Cannot Add";
+		}
 		Current_Account.DebtHistoryExtraction();
 		Current_Account._currentAccount.UpdateBalance();
 		Current_Account.DatabaseExtraction();

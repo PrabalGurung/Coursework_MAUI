@@ -1,4 +1,5 @@
 ﻿using System.Data.SQLite;
+using System.Xml.Linq;
 
 public class Database_Manager
 {
@@ -19,6 +20,15 @@ public class Database_Manager
 			cmd.Parameters.AddWithValue("@name", name);
 			cmd.Parameters.AddWithValue("@password", password);
 			cmd.Parameters.AddWithValue("@balance", balance);
+			cmd.ExecuteNonQuery();
+		}
+	}
+
+	public void InsertDefaultTags()
+	{
+		string query = "INSERT INTO Tags(name) VALUES ('No Tags'), ('Yearly'), ('Monthly'), ('Food'), ('Drinks'), ('Clothes'), ('Gadgets'), ('Miscellaneous'), ('Fuel'), ('Rent'), ('EMI'), ('Party')";
+		using (var cmd = new SQLiteCommand(query, _connection))
+		{
 			cmd.ExecuteNonQuery();
 		}
 	}

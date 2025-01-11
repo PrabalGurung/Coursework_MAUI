@@ -25,17 +25,17 @@
 
 	public void OnClick()
 	{
+		Initializer create_Table = new Initializer();
+		create_Table.CheckDatabase();
 		if (string.Equals(_username, "Skybird") && string.Equals(_password, "123"))
 		{
 			LogIn.log = true;
-			Current_Account._currentAccount = new Finance_Handler(_username, 10000);
+
+			Current_Account._currentAccount = new Finance_Handler(_username);
 			Navigation.NavigateTo("/Home");
-			Initializer create_Table = new Initializer();
-			create_Table.CheckDatabase();
+
 			Current_Account.DatabaseExtraction();
-			Console.WriteLine("xa");
 			Current_Account.DebtHistoryExtraction();
-			Console.WriteLine("xa1");
 
 			Current_Account._currentAccount.UpdateBalance();
 			Current_Account.Tags();
