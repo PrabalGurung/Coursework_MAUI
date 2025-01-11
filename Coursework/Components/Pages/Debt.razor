@@ -5,6 +5,7 @@
 <input class="input-field" type="text" @bind="_amount" placeholder="Debt" required>
 <input class="input-field" type="date" @bind="_date" placeholder="date" required>
 <input class="input-field" type="text" @bind="_source" placeholder="source" required>
+
 <select @bind="_tag">
 	@for (int i = 0; i < Current_Account._tags.Count; i++)
 	{

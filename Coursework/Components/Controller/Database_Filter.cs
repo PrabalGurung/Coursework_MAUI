@@ -84,7 +84,8 @@ public class Database_Filter
 			AND d.date BETWEEN @firstDate AND @lastDate
 			AND d.type LIKE CONCAT('%', @debtType, '%')
 			AND t.name LIKE CONCAT('%', @TagName, '%')
-		";
+		" + order;
+		Console.WriteLine(query);
 
         using (var cmd = new SQLiteCommand(query, _connection))
         {
@@ -94,7 +95,6 @@ public class Database_Filter
             cmd.Parameters.AddWithValue("@incomeType", incomeType);
 			cmd.Parameters.AddWithValue("@outflowType", outcomeType);
 			cmd.Parameters.AddWithValue("@debtType", debtType);
-			cmd.Parameters.AddWithValue("@order", order);
 			cmd.Parameters.AddWithValue("@TagName", tags);
 
 			using (var reader = cmd.ExecuteReader())

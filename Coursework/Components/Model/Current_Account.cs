@@ -36,6 +36,21 @@ public class Current_Account
 
     public static void Filter(int userId, DateOnly firstDate, DateOnly lastDate, string incomeType, string outcomeType, string debtType, string tags, string order)
     {
+		if (string.Equals(order, "date"))
+        {
+            order = " Order By date";
+        } else if (string.Equals(order, "source"))
+        {
+            order = " Order By source";
+        } else if (string.Equals(order, "tags"))
+        {
+            order = " Order By tags";
+        } else
+        {
+            order = "";
+        }
+
+        Console.WriteLine(order);
         Database_Filter database_filter = new Database_Filter();
         database_filter.FilterSearch(userId, firstDate, lastDate, incomeType, outcomeType, debtType, tags, order);
     }
