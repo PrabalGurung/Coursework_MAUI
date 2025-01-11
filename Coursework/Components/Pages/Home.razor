@@ -35,7 +35,6 @@
 	</select>
 
 	<select @bind="_tag">
-		<option>""</option>
 		@for (int i = 0; i < Current_Account._tags.Count; i++)
 		{
 			<option value="@Current_Account._tags[i]._tags">@Current_Account._tags[i]._tags</option>
@@ -131,7 +130,7 @@ else
 <br />
 
 <h4>Debt History</h4>
-@if (Current_Account._currentAccount._transaction.Count > 0)
+@if (Current_Account.dUs.Count > 0)
 {
 	<table border="1">
 		<tr>
@@ -157,7 +156,7 @@ else
 }
 else
 {
-	<p>No History available.</p>
+	<p>No Debt History available.</p>
 }
 
 @code {
