@@ -64,23 +64,26 @@ public class Database_Filter
     public void FilterSearch(int userId, DateOnly firstDate, DateOnly lastDate, string incomeType, string outcomeType, string debtType, string tags, string order)
     {
         string query = @"
-		SELECT date, amount, source, 0, type, 'choose', 'choose'
-		FROM inflows 
-		WHERE userId = 1 
-			AND date BETWEEN @firstDate AND @lastDate
-			AND type LIKE CONCAT('%', @incomeType, '%')
+		SELECT date, amount, source, 0, type, 'choose', 'choose', IFNULL(t.name, '')
+		FROM inflows i JOIN tags t ON i.tagId = t.id
+		WHERE i.userId = 1 
+			AND i.date BETWEEN @firstDate AND @lastDate
+			AND i.type LIKE CONCAT('%', @incomeType, '%')
+			AND t.name LIKE CONCAT('%', @TagName, '%')
 		UNION ALL
-		SELECT date, amount, source, 0, 'choose', type, 'choose'
-		FROM outflows 
-		WHERE userId = 1 
-			AND date BETWEEN @firstDate AND @lastDate
-			AND type LIKE CONCAT('%', @outflowType, '%')
+		SELECT date, amount, source, 0, 'choose', type, 'choose', IFNULL(t.name, '')
+		FROM outflows o JOIN tags t ON o.tagId = t.id
+		WHERE o.userId = 1 
+			AND o.date BETWEEN @firstDate AND @lastDate
+			AND o.type LIKE CONCAT('%', @outflowType, '%')
+			AND t.name LIKE CONCAT('%', @TagName, '%')
 		UNION ALL
-		SELECT date, amount, source, outstanding_amount, 'choose', 'choose', type
-		FROM debts
-		WHERE userId = 1 
-			AND date BETWEEN @firstDate AND @lastDate
-			AND type LIKE CONCAT('%', @debtType, '%')
+		SELECT date, amount, source, outstanding_amount, 'choose', 'choose', type, IFNULL(t.name, '')
+		FROM debts d JOIN tags t ON d.tagId = t.id
+		WHERE d.userId = 1 
+			AND d.date BETWEEN @firstDate AND @lastDate
+			AND d.type LIKE CONCAT('%', @debtType, '%')
+			AND t.name LIKE CONCAT('%', @TagName, '%')
 		";
 
         using (var cmd = new SQLiteCommand(query, _connection))
@@ -92,6 +95,7 @@ public class Database_Filter
 			cmd.Parameters.AddWithValue("@outflowType", outcomeType);
 			cmd.Parameters.AddWithValue("@debtType", debtType);
 			cmd.Parameters.AddWithValue("@order", order);
+			cmd.Parameters.AddWithValue("@TagName", tags);
 
 			using (var reader = cmd.ExecuteReader())
             {
@@ -105,7 +109,8 @@ public class Database_Filter
                         _used = reader.GetInt32(3),
                         _inflowType = (option.Cash_Inflow)Enum.Parse(typeof(option.Cash_Inflow), reader.GetString(4)),
                         _outflowType = (option.Cash_Outflow)Enum.Parse(typeof(option.Cash_Outflow), reader.GetString(5)),
-                        _debt = reader.GetString(6)
+                        _debt = reader.GetString(6),
+						_tags = reader.GetString(7)
                     });
                 }
             }

@@ -95,7 +95,8 @@ public class Database_Manager
 
 	public void InsertDebt(int userId, int amount, string source, string date, string type, int index, string description)
 	{
-		string query = "INSERT INTO debts (userId, outstanding_amount, amount, source, date, type, tagId, description) VALUES (@userId, @outstanding_amount, @amount, @source, @date, @type, @tagId, @description)";
+		Console.WriteLine("Tag:" + index);
+		string query = "INSERT INTO debts (userId, outstanding_amount, amount, source, date, type, tagId, description) VALUES (@userId, @outstanding_amount, @amount, @source, @date, @type, @index, @description)";
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
 			cmd.Parameters.AddWithValue("@userId", userId);
@@ -104,7 +105,7 @@ public class Database_Manager
 			cmd.Parameters.AddWithValue("@source", source);
 			cmd.Parameters.AddWithValue("@date", date);
 			cmd.Parameters.AddWithValue("@type", type);
-			cmd.Parameters.AddWithValue("@tagId", index);
+			cmd.Parameters.AddWithValue("@index", index);
 			cmd.Parameters.AddWithValue("@description", description);
 			cmd.ExecuteNonQuery();
 		}

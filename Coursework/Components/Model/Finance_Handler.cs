@@ -23,21 +23,28 @@ public class Finance_Handler
 		dm = new Database_Manager();
 		option.Cash_Outflow _type = option.Cash_Outflow.choose;
 
+		//debt
 		if (t._debt != null )
 		{
+			Database_Manager database_Manager = new Database_Manager();
+			database_Manager.IncreaseBalance(1, t._balance);
+			Console.WriteLine("Tag: " + t._index);
 			dm.InsertDebt(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._debt.ToString(), t._index, t._description);
 			return true;
 		}
 		else
 		{
+			//inflow
 			if (t._outflowType == _type)
 			{
+
 				int iflowId = dm.InsertInflow(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._inflowType.ToString(), t._index, t._description);
 				DebtTrack(t._balance, iflowId);
 				return true;
 			}
 			else
 			{
+				//outflow
 				if (_balance > t._balance)
 				{
 					Database_Manager database_Manager = new Database_Manager();

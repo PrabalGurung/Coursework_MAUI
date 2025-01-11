@@ -4,8 +4,15 @@ public class Current_Account
 {
 	public static Finance_Handler _currentAccount { get; set; }
     public static List<Transaction> _tags { get; set; } = new List<Transaction>();
+    public static List<DUS> dUs { get; set; } = new List<DUS>();
     
-
+    public static void DebtHistoryExtraction()
+    {
+        DropHistory();
+        Database_Selection databaseSelection = new Database_Selection();
+        databaseSelection.GetDebtHistory();
+        databaseSelection.Close();
+    }
     public static void DatabaseExtraction()
     {
         DropTable();
@@ -32,10 +39,14 @@ public class Current_Account
         Database_Filter database_filter = new Database_Filter();
         database_filter.FilterSearch(userId, firstDate, lastDate, incomeType, outcomeType, debtType, tags, order);
     }
-
+    public static void DropHistory()
+    {
+        dUs.Clear();
+    }
     public static void Tags()
     {
         Database_Selection ds = new Database_Selection();
         ds.GetTags();
+        ds.Close();
     }       
 }

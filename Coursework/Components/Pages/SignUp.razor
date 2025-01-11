@@ -33,6 +33,10 @@
 			Initializer create_Table = new Initializer();
 			create_Table.CheckDatabase();
 			Current_Account.DatabaseExtraction();
+			Console.WriteLine("xa");
+			Current_Account.DebtHistoryExtraction();
+			Console.WriteLine("xa1");
+
 			Current_Account._currentAccount.UpdateBalance();
 			Current_Account.Tags();
 		}

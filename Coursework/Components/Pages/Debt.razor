@@ -30,7 +30,9 @@
 	public void OnClick()
 	{
 		Console.WriteLine(_status);
+		Console.WriteLine("Tag: " + _tag);
 		success = Current_Account._currentAccount.History(new Transaction(_amount, _status, _source, _date, _tag, _note));
+		Current_Account.DebtHistoryExtraction();
 		Current_Account._currentAccount.UpdateBalance();
 		Current_Account.DatabaseExtraction();
 	}

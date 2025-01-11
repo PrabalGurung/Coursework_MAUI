@@ -34,7 +34,7 @@ public class Database_Selection
 
 	public void GetInflows(int userId)
 	{
-		string query = "SELECT * FROM inflows WHERE userId = @userId";
+		string query = "SELECT i.*, t.name FROM inflows i JOIN tags t ON i.tagId = t.id WHERE userId = @userId";
 
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
@@ -49,7 +49,8 @@ public class Database_Selection
 						_balance = reader.GetInt32(2),
 						_inflowType = (option.Cash_Inflow)Enum.Parse(typeof(option.Cash_Inflow), reader.GetString(5)),
 						_source = reader.GetString(3),
-						_date = DateOnly.Parse(reader.GetString(4))
+						_date = DateOnly.Parse(reader.GetString(4)),
+						_tags = reader.GetString(8)
 					});
 				}
 			}
@@ -58,7 +59,7 @@ public class Database_Selection
 
 	public void GetOutflows(int userId)
 	{
-		string query = "SELECT * FROM outflows WHERE userId = @userId";
+		string query = "SELECT o.*, t.name FROM outflows o JOIN tags t ON o.tagId = t.id WHERE userId = @userId";
 
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
@@ -73,7 +74,8 @@ public class Database_Selection
 						_balance = reader.GetInt32(2),
 						_outflowType = (option.Cash_Outflow)Enum.Parse(typeof(option.Cash_Outflow), reader.GetString(5)),
 						_source = reader.GetString(3),
-						_date = DateOnly.Parse(reader.GetString(4))
+						_date = DateOnly.Parse(reader.GetString(4)),
+						_tags = reader.GetString(8)
 					});
 				}
 			}
@@ -82,7 +84,7 @@ public class Database_Selection
 
 	public void GetDebts(int userId)
 	{
-		string query = "SELECT amount, type, source, date FROM debts WHERE userId = @userId";
+		string query = "SELECT d.amount, d.type, d.source, d.date, t.name FROM debts d JOIN tags t ON d.tagId = t.id WHERE userId = @userId";
 
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
@@ -97,7 +99,8 @@ public class Database_Selection
 						_balance = reader.GetInt32(0),
 						_debt = reader.GetString(1),
 						_source = reader.GetString(2),
-						_date = DateOnly.Parse(reader.GetString(3))
+						_date = DateOnly.Parse(reader.GetString(3)),
+						_tags = reader.GetString(4)
 					});
 				}
 			}
@@ -159,6 +162,39 @@ public class Database_Selection
 				}
 			}
 		}
+	}
+
+	public void GetDebtHistory()
+	{
+		string query = @"
+		SELECT u.name, IFNULL(dus.debtId, 0), IFNULL(dus.inflowId, 0), i.source, IFNULL(d.outstanding_amount, 0) ,dus.usedAmount FROM DUS 
+		JOIN debts d 
+			ON DUS.debtId = d.id 
+		JOIN users u
+			ON DUS.userId = u.id
+		JOIN inflows i
+			ON DUS.inflowId = i.id
+		";
+
+		using (var cmd =  new SQLiteCommand(query, _connection))
+		{
+			using(var reader = cmd.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					Current_Account.dUs.Add(new DUS
+					{
+						user = reader.GetString(0),
+						debt = reader.GetInt32(1),
+						inflow = reader.GetInt32(2),
+						source = reader.GetString(3),
+						outstandingAmount = reader.GetInt32(4),
+						userAmount = reader.GetInt32(5)
+					});
+				}
+			}
+		}
+
 	}
 
 	public void Close()

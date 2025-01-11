@@ -7,101 +7,6 @@
 <h3>Welcome, @Current_Account._currentAccount._name</h3>
 <p>Your Current Balance: @Current_Account._currentAccount._balance</p>
 
-<button class="submit-btn" @onclick="AdvanceSearch" type="submit">Advance Search</button>
-@if (advanceSearch)
-{
-    <input class="input-field" type="date" @bind="initialDate" placeholder="Date">
-    <input class="input-field" type="date" @bind="finalDate" placeholder="Date">
-
-    <select @bind="_typeInflow">
-        @foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Inflow)))
-        {
-            <option value="@cashInflow">@cashInflow</option>
-        }
-    </select>
-
-    <select @bind="_typeOutflow">
-        @foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Outflow)))
-        {
-            <option value="@cashInflow">@cashInflow</option>
-        }
-    </select>
-
-    <select @bind="_status">
-        <option>Pending</option>
-        <option>Cleared</option>
-    </select>
-
-    <select @bind="_order">
-        <option>date</option>
-        <option>source</option>
-    </select>
-    <button class="submit-btn" @onclick="filter" type="submit">Advance Search</button>
-}
-
-<button class="submit-btn" @onclick="SortDate" type="submit">Sort Date</button>
-
-@if (Current_Account._currentAccount._transaction.Count > 0)
-{
-    <table border="1">
-        <tr>
-            <td> Amount</td>
-            <td> Date</td>
-            <td> Inflow</td>
-            <td> OutFlow</td>
-            <td> Debt</td>
-            <td> Outstanding Amount</td>
-        </tr>
-        @foreach (var transaction in Current_Account._currentAccount._transaction)
-        {
-            <tr>
-                <td>@transaction._balance</td>
-                <td>@transaction._date</td>
-                @if(transaction._inflowType != option.Cash_Inflow.choose)
-                {
-                    <td>@transaction._inflowType</td>
-                    <td>--</td>              
-                    <td>--</td>
-
-                    TotalInFlow(transaction._balance);
-                    MaxMinInflow(transaction._balance);
-                }
-                else if (transaction._outflowType != option.Cash_Outflow.choose)
-                {
-                    <td>--</td>
-                    <td>@transaction._outflowType</td>
-                    <td>--</td>
-
-                    TotalOutFlow(transaction._balance);
-                    MaxMinOutflow(transaction._balance);
-                } else
-                {
-                    <td>--</td>
-                    <td>--</td>
-                    <td>@transaction._debt</td>
-
-                    TotalDebt(@transaction._balance, transaction._used);
-                    MaxMinDebt(transaction._balance);
-                }
-                <td>@transaction._used</td>
-            </tr>
-            Tran();
-        }
-        <tr>
-            <td></td>
-            <td></td>
-            <td>@totalInflow</td>
-            <td>@totalOutflow</td>
-            <td>@totalDebt</td>
-            <td>Total Transaction: @trans</td>
-        </tr>
-    </table>
-}
-else
-{
-    <p>No transactions available.</p>
-}
-
 <h3>Inflow</h3>
 <label>@highestInflow</label>
 <label>@lowestInflow</label>
@@ -113,112 +18,255 @@ else
 <h3>Debt</h3>
 <label>@highestDebt</label>
 <label>@lowestDebt</label>
+<br/>
 
-@code{
-    int totalInflow;
-    int totalOutflow;
-    int totalDebt;
-    int trans;
-    int highestInflow = 0;
-    int lowestInflow = 1000000;
-    int highestOutflow = 0;
-    int lowestOutflow = 100000;
-    int highestDebt = 0;
-    int lowestDebt = 10000;
+<button class="submit-btn" @onclick="AdvanceSearch" type="submit">Advance Search</button>
+@if (advanceSearch)
+{
+	<input class="input-field" type="date" @bind="initialDate" placeholder="Date">
+	<input class="input-field" type="date" @bind="finalDate" placeholder="Date">
 
-    string _status;
-    string _order;
+	<input class="input-field" type="text" @bind="_title" placeholder="Title">
 
-    DateOnly initialDate;
-    DateOnly finalDate;
+	<select @bind="_typeInflow">
+		@foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Inflow)))
+		{
+			<option value="@cashInflow">@cashInflow</option>
+		}
+	</select>
 
-    bool advanceSearch = false;
+	<select @bind="_typeOutflow">
+		@foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Outflow)))
+		{
+			<option value="@cashInflow">@cashInflow</option>
+		}
+	</select>
 
-    public option.Cash_Outflow _typeOutflow = option.Cash_Outflow.debit;
-    public option.Cash_Inflow _typeInflow = option.Cash_Inflow.Credit;
+	<select @bind="_status">
+		<option>Pending</option>
+		<option>Clear</option>
+	</select>
 
-    public void TotalInFlow(int balance)
-    {
-        totalInflow += balance;
-    }
+	<select @bind="_tag">
+		<option>""</option>
+		@for (int i = 0; i < Current_Account._tags.Count; i++)
+		{
+			<option value="@Current_Account._tags[i]._tags">@Current_Account._tags[i]._tags</option>
+		}
+	</select>
 
-    public void TotalOutFlow(int balance)
-    {
-        totalOutflow += balance;
-    }
+	<select @bind="_order">
+		<option>date</option>
+		<option>source</option>
+	</select>
+	<button class="submit-btn" @onclick="filter" type="submit">Advance Search</button>
+}
 
-    public void TotalDebt(int balance, int paid)
-    {
-        totalDebt += balance - paid;
-    }
+<button class="submit-btn" @onclick="SortDate" type="submit">Sort Date</button>
 
-    public void Tran()
-    {
-        trans = totalInflow + totalDebt - totalOutflow;
-    }
+<h4> Table of Transaction History</h4>
 
-    public void MaxMinInflow(int balance)
-    {
-        if (balance > highestInflow)
-        {
-            highestInflow = balance;
-        }
+@if (Current_Account._currentAccount._transaction.Count > 0)
+{
+	<table border="1">
+		<tr>
+			<td> Amount</td>
+			<td> Date</td>
+			<td> Inflow</td>
+			<td> OutFlow</td>
+			<td> Debt</td>
+			<td> Tags</td>
+			<td> Source</td>
+		</tr>
+		@foreach (var transaction in Current_Account._currentAccount._transaction)
+		{
+			<tr>
+				<td>@transaction._balance</td>
+				<td>@transaction._date</td>
+				@if (transaction._inflowType != option.Cash_Inflow.choose)
+				{
+					<td>@transaction._inflowType</td>
+					<td>--</td>
+					<td>--</td>
 
-        if (balance < lowestInflow)
-        {
-            lowestInflow = balance;
-        }
-    }
+					TotalInFlow(transaction._balance);
+					MaxMinInflow(transaction._balance);
+				}
+				else if (transaction._outflowType != option.Cash_Outflow.choose)
+				{
+					<td>--</td>
+					<td>@transaction._outflowType</td>
+					<td>--</td>
 
-    public void MaxMinOutflow(int balance)
-    {
-        if (balance > highestOutflow)
-        {
-            highestOutflow = balance;
-        }
-        if (balance < lowestOutflow)
-        {
-            lowestOutflow = balance;
-        }
-    }
+					TotalOutFlow(transaction._balance);
+					MaxMinOutflow(transaction._balance);
+				}
+				else
+				{
+					<td>--</td>
+					<td>--</td>
+					<td>@transaction._debt</td>
 
-    public void MaxMinDebt(int balance)
-    {
-        if (balance > highestDebt)
-        {
-            highestDebt = balance;
-        }
-        if (balance < lowestDebt)
-        {
-            lowestDebt = balance;
-        }
-    }
+					TotalDebt(@transaction._balance, transaction._used);
+					MaxMinDebt(transaction._balance);
+				}
+				<td>@transaction._tags</td>
+				<td>@transaction._source</td>
+			</tr>
+			Tran();
+		}
+		<tr>
+			<td></td>
+			<td></td>
+			<td>@totalInflow</td>
+			<td>@totalOutflow</td>
+			<td>@totalDebt</td>
+			<td>Total Transaction: @trans</td>
+		</tr>
+	</table>
+}
+else
+{
+	<p>No transactions available.</p>
+}
 
-    public void SortDate()
-    {
-        Console.WriteLine("axa");
-        Current_Account.DropTable();
-        Current_Account.SortDate(1);
-    }
+<h4>Debt History</h4>
+@if (Current_Account._currentAccount._transaction.Count > 0)
+{
+	<table border="1">
+		<tr>
+			<td>user</td>
+			<td>inflow</td>
+			<td>debt</td>
+			<td>Used Amount</td>
+			<td>Outstanding Amount</td>
+			<td>Inflow source</td>
+		</tr>
+		@foreach (var history in Current_Account.dUs)
+		{
+			<tr>
+				<td>@history.user</td>
+				<td>@history.inflow</td>
+				<td>@history.debt</td>
+				<td>@history.userAmount</td>
+				<td>@history.outstandingAmount</td>
+				<td>@history.source</td>
+			</tr>
+		}
+	</table>
+}
+else
+{
+	<p>No History available.</p>
+}
 
-    public void AdvanceSearch()
-    {
-        if (advanceSearch == false)
-        {
-            advanceSearch = true;
-        } 
-        else
-        {
-            advanceSearch = false;
-        }
-    }
+@code {
+	int totalInflow;
+	int totalOutflow;
+	int totalDebt;
+	int trans;
+	int highestInflow = 0;
+	int lowestInflow = 1000000;
+	int highestOutflow = 0;
+	int lowestOutflow = 100000;
+	int highestDebt = 0;
+	int lowestDebt = 10000;
 
-    public void filter()
-    {
-        Console.WriteLine(initialDate);
-        Console.WriteLine("axa");
-        Current_Account.DropTable();
-        Current_Account.Filter(1, initialDate, finalDate, _typeInflow.ToString(), _typeOutflow.ToString(), _status, "", _order);
-        Console.WriteLine("sakyo");
-    }
+	string _title;
+	string _status;
+	string _order;
+	string _tag;
+
+	DateOnly initialDate;
+	DateOnly finalDate;
+
+	bool advanceSearch = false;
+
+	public option.Cash_Outflow _typeOutflow = option.Cash_Outflow.debit;
+	public option.Cash_Inflow _typeInflow = option.Cash_Inflow.Credit;
+
+	public void TotalInFlow(int balance)
+	{
+		totalInflow += balance;
+	}
+
+	public void TotalOutFlow(int balance)
+	{
+		totalOutflow += balance;
+	}
+
+	public void TotalDebt(int balance, int paid)
+	{
+		totalDebt += balance - paid;
+	}
+
+	public void Tran()
+	{
+		trans = totalInflow + totalDebt - totalOutflow;
+	}
+
+	public void MaxMinInflow(int balance)
+	{
+		if (balance > highestInflow)
+		{
+			highestInflow = balance;
+		}
+
+		if (balance < lowestInflow)
+		{
+			lowestInflow = balance;
+		}
+	}
+
+	public void MaxMinOutflow(int balance)
+	{
+		if (balance > highestOutflow)
+		{
+			highestOutflow = balance;
+		}
+		if (balance < lowestOutflow)
+		{
+			lowestOutflow = balance;
+		}
+	}
+
+	public void MaxMinDebt(int balance)
+	{
+		if (balance > highestDebt)
+		{
+			highestDebt = balance;
+		}
+		if (balance < lowestDebt)
+		{
+			lowestDebt = balance;
+		}
+	}
+
+	public void SortDate()
+	{
+		Current_Account.DropTable();
+		Current_Account.SortDate(1);
+	}
+
+	public void AdvanceSearch()
+	{
+		if (advanceSearch == false)
+		{
+			advanceSearch = true;
+		}
+		else
+		{
+			advanceSearch = false;
+		}
+	}
+
+	public void filter()
+	{
+		totalInflow = 0;
+		totalOutflow = 0;
+		totalDebt = 0;
+		Console.WriteLine(initialDate);
+		Current_Account.DropTable();
+		Current_Account.Filter(1, initialDate, finalDate, _typeInflow.ToString(), _typeOutflow.ToString(), _status, _tag, _order);
+	}
 }
