@@ -50,10 +50,8 @@
 		<option value="no">no sort</option>
 	</select>
 
-	<button class="submit-btn" @onclick="filter" type="submit">Filter/Sort Search</button>
+	<button class="submit-btn" @onclick="Filtering" type="submit">Filter/Sort Search</button>
 }
-
-<button class="submit-btn" @onclick="SortDate" type="submit">Sort Date</button>
 
 <h4> Table of Transaction History</h4>
 
@@ -264,12 +262,12 @@ else
 		}
 	}
 
-	public void filter()
+	public void Filtering()
 	{
 		totalInflow = 0;
 		totalOutflow = 0;
 		totalDebt = 0;
 		Current_Account.DropTable();
-		Current_Account.Filter(1, initialDate, finalDate, _typeInflow.ToString(), _typeOutflow.ToString(), _status, _tag, _order);
+		Current_Account.Filter(1, initialDate, finalDate, _typeInflow.ToString(), _typeOutflow.ToString(), _status, _tag, _order, _title);
 	}
 }

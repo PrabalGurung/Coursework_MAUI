@@ -34,7 +34,7 @@ public class Current_Account
         database_Selection.GetDate(1);
     }
 
-    public static void Filter(int userId, DateOnly firstDate, DateOnly lastDate, string incomeType, string outcomeType, string debtType, string tags, string order)
+    public static void Filter(int userId, DateOnly firstDate, DateOnly lastDate, string incomeType, string outcomeType, string debtType, string tags, string order, string _title)
     {
 		if (string.Equals(order, "date"))
         {
@@ -52,7 +52,7 @@ public class Current_Account
 
         Console.WriteLine(order);
         Database_Filter database_filter = new Database_Filter();
-        database_filter.FilterSearch(userId, firstDate, lastDate, incomeType, outcomeType, debtType, tags, order);
+        database_filter.FilterSearch(userId, firstDate, lastDate, incomeType, outcomeType, debtType, tags, order, _title);
     }
     public static void DropHistory()
     {

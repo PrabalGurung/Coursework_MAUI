@@ -41,10 +41,11 @@
 
 	public void OnClick()
 	{
-		Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date, _tag, _note));
+		Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date, _tag+1, _note));
 		Current_Account._currentAccount.UpdateBalance();
 		_message = "Successfully Added";
 		Current_Account.DatabaseExtraction();
+		Current_Account.DebtHistoryExtraction();
 	}
 }
 

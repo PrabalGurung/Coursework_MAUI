@@ -61,7 +61,7 @@ public class Database_Filter
 		
 	}
 
-    public void FilterSearch(int userId, DateOnly firstDate, DateOnly lastDate, string incomeType, string outcomeType, string debtType, string tags, string order)
+    public void FilterSearch(int userId, DateOnly firstDate, DateOnly lastDate, string incomeType, string outcomeType, string debtType, string tags, string order, string title)
     {
         string query = @"
 		SELECT date, amount, source, 0, type, 'choose', 'choose', IFNULL(t.name, '')
@@ -70,6 +70,7 @@ public class Database_Filter
 			AND i.date BETWEEN @firstDate AND @lastDate
 			AND i.type LIKE CONCAT('%', @incomeType, '%')
 			AND t.name LIKE CONCAT('%', @TagName, '%')
+			AND i.source LIKE CONCAT('%', @source, '%')
 		UNION ALL
 		SELECT date, amount, source, 0, 'choose', type, 'choose', IFNULL(t.name, '')
 		FROM outflows o JOIN tags t ON o.tagId = t.id
@@ -77,6 +78,7 @@ public class Database_Filter
 			AND o.date BETWEEN @firstDate AND @lastDate
 			AND o.type LIKE CONCAT('%', @outflowType, '%')
 			AND t.name LIKE CONCAT('%', @TagName, '%')
+			AND o.source LIKE CONCAT('%', @source, '%')
 		UNION ALL
 		SELECT date, amount, source, outstanding_amount, 'choose', 'choose', type, IFNULL(t.name, '')
 		FROM debts d JOIN tags t ON d.tagId = t.id
@@ -84,6 +86,7 @@ public class Database_Filter
 			AND d.date BETWEEN @firstDate AND @lastDate
 			AND d.type LIKE CONCAT('%', @debtType, '%')
 			AND t.name LIKE CONCAT('%', @TagName, '%')
+			AND d.source LIKE CONCAT('%', @source, '%')
 		" + order;
 		Console.WriteLine(query);
 
@@ -96,6 +99,7 @@ public class Database_Filter
 			cmd.Parameters.AddWithValue("@outflowType", outcomeType);
 			cmd.Parameters.AddWithValue("@debtType", debtType);
 			cmd.Parameters.AddWithValue("@TagName", tags);
+			cmd.Parameters.AddWithValue("@source", title);
 
 			using (var reader = cmd.ExecuteReader())
             {

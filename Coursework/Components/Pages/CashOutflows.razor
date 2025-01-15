@@ -42,7 +42,7 @@
 
 	public void OnClick()
 	{
-		success = Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date, _tag, _note));
+		success = Current_Account._currentAccount.History(new Transaction(_balance, _type, _source, _date, _tag+1, _note));
 		Current_Account._currentAccount.UpdateBalance();
 		if (success)
 		{
