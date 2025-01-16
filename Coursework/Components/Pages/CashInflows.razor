@@ -3,22 +3,28 @@
 
 <div class="cashinflow-form">
 	<h2>CashInflows</h2>
-	<input class="input-field" type="text" @bind="_balance" placeholder="Username" required>
+	<input class="input-field" type="text" @bind="_balance" placeholder="Amount" required>
+	<br />
 	<input class="input-field" type="text" @bind="_source" placeholder="Source" required>
+	<br />
 	<input class="input-field" type="date" @bind="_date" placeholder="Date" required>
+	<br />
 	<select @bind="_type">
 		@foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Inflow)))
 		{
 			<option value="@cashInflow">@cashInflow</option>
 		}
 	</select>
+	<br />
 	<select @bind="_tag">
 		@for (int i = 0; i < Current_Account._tags.Count; i++)
 		{
 			<option value="@i">@Current_Account._tags[i]._tags</option>
 		}
 	</select>
-	<input class="input-field" type="text" @bind="_note" placeholder="Date">
+	<br />
+	<input class="input-field" type="text" @bind="_note" placeholder="Note">
+	<br />
 
 	<button class="submit-btn" @onclick="OnClick" type="submit">Add Inflow</button>
 </div>

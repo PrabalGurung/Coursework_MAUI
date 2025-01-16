@@ -3,23 +3,28 @@
 
 <div class="cashoutflow-form">
 	<h2>CashOutflows</h2>
-	<input class="input-field" type="text" @bind="_balance" placeholder="Username" required>
+	<input class="input-field" type="text" @bind="_balance" placeholder="Amount" required>
+	<br />
 	<input class="input-field" type="text" @bind="_source" placeholder="Source" required>
+	<br />
 	<input class="input-field" type="date" @bind="_date" placeholder="Date" required>
+	<br />
 	<select @bind="_type">
 		@foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Outflow)))
 		{
 			<option value="@cashInflow">@cashInflow</option>
 		}   
 	</select>
+	<br />
 	<select @bind="_tag">
 		@for (int i = 0; i < Current_Account._tags.Count; i++)
 		{
 			<option value="@i">@Current_Account._tags[i]._tags</option>
 		}
 	</select>
+	<br />
 	<input class="input-field" type="text" @bind="_note" placeholder="Note">
-
+	<br />
 	<button class="submit-btn" @onclick="OnClick" type="submit">Add Outflow</button>
 </div>
 
@@ -47,7 +52,8 @@
 		if (success)
 		{
 			_message = "added successfully";
-		} else
+		} 
+		else
 		{
 			_message = "insufficient balance";
 		}

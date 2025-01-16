@@ -6,19 +6,6 @@
 <h3>Welcome, @Current_Account._currentAccount._name</h3>
 <p>Your Current Balance: @Current_Account._currentAccount._balance</p>
 
-<h3>Inflow</h3>
-<label>@highestInflow</label>
-<label>@lowestInflow</label>
-
-<h3>Outflow</h3>
-<label>@highestOutflow</label>
-<label>@lowestOutflow</label>
-
-<h3>Debt</h3>
-<label>@highestDebt</label>
-<label>@lowestDebt</label>
-<br />
-
 @if (!advanceSearch)
 {
 	<button class="submit-btn" @onclick="AdvanceSearch" type="submit">Advance Search</button>
@@ -62,7 +49,7 @@
 		<option value="tag">tag</option>
 		<option value="no">no sort</option>
 	</select>
-	
+
 	<br />
 
 	<button class="submit-btn" @onclick="Filtering" type="submit">Filter/Sort Search</button>
@@ -111,7 +98,14 @@
 				{
 					<td>--</td>
 					<td>--</td>
-					<td>@transaction._debt</td>
+					@if (string.Equals(transaction._debt, "Pending"))
+					{
+						<td style="background-color: red; color: white;">@transaction._debt</td>
+					}
+					else
+					{
+						<td style="background-color: green; color: white;">@transaction._debt</td>
+					}
 
 					TotalDebt(@transaction._balance, transaction._used);
 					MaxMinDebt(transaction._balance);
@@ -123,7 +117,7 @@
 		}
 		<tr>
 			<td></td>
-			<td></td>
+			<td>Total:</td>
 			<td>@totalInflow</td>
 			<td>@totalOutflow</td>
 			<td>@totalDebt</td>
@@ -136,6 +130,18 @@ else
 	<p>No transactions available.</p>
 }
 
+<h3>Inflow</h3>
+<label>@highestInflow</label>
+<label>@lowestInflow</label>
+
+<h3>Outflow</h3>
+<label>@highestOutflow</label>
+<label>@lowestOutflow</label>
+
+<h3>Debt</h3>
+<label>@highestDebt</label>
+<label>@lowestDebt</label>
+<br />
 
 
 <h4>Debt History</h4>

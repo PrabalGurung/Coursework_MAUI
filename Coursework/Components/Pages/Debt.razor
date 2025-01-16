@@ -2,9 +2,12 @@
 @rendermode InteractiveServer
 
 <h3>Debt</h3>
-<input class="input-field" type="text" @bind="_amount" placeholder="Debt" required>
+<input class="input-field" type="text" @bind="_amount" placeholder="Amount" required>
+<br />
 <input class="input-field" type="date" @bind="_date" placeholder="date" required>
+<br />
 <input class="input-field" type="text" @bind="_source" placeholder="source" required>
+<br />
 
 <select @bind="_tag">
 	@for (int i = 0; i < Current_Account._tags.Count; i++)
@@ -12,9 +15,13 @@
 		<option value="@i">@Current_Account._tags[i]._tags</option>
 	}
 </select>
+<br />
+
 <input class="input-field" type="text" @bind="_note" placeholder="note">
 
+<br />
 <button class="submit-btn" @onclick="OnClick" type="submit">Add Debt</button>
+<br />
 
 @if (!string.IsNullOrEmpty(_message))
 {
