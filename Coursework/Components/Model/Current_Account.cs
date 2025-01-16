@@ -50,6 +50,16 @@ public class Current_Account
             order = "";
         }
 
+        if (string.Equals(incomeType, "choose"))
+        {
+            incomeType = "";
+        }   
+        
+        if (string.Equals(outcomeType, "choose"))
+        {
+            outcomeType = "";
+        }
+
         Console.WriteLine(order);
         Database_Filter database_filter = new Database_Filter();
         database_filter.FilterSearch(userId, firstDate, lastDate, incomeType, outcomeType, debtType, tags, order, _title);

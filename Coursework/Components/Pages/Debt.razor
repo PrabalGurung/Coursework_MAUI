@@ -1,7 +1,12 @@
 ﻿@page "/Debt"
 @rendermode InteractiveServer
-
 <h3>Debt</h3>
+
+@if (!string.IsNullOrEmpty(_message))
+{
+	<div class="alert">@_message</div>
+}
+
 <input class="input-field" type="text" @bind="_amount" placeholder="Amount" required>
 <br />
 <input class="input-field" type="date" @bind="_date" placeholder="date" required>
@@ -22,11 +27,6 @@
 <br />
 <button class="submit-btn" @onclick="OnClick" type="submit">Add Debt</button>
 <br />
-
-@if (!string.IsNullOrEmpty(_message))
-{
-	<div class="message">@_message</div>
-}
 
 @code {
 	public int _amount;

@@ -70,6 +70,7 @@
 			<td> Debt</td>
 			<td> Tags</td>
 			<td> Source</td>
+			<td> Description</td>
 		</tr>
 		@foreach (var transaction in Current_Account._currentAccount._transaction)
 		{
@@ -112,6 +113,7 @@
 				}
 				<td>@transaction._tags</td>
 				<td>@transaction._source</td>
+				<td>@transaction._description</td>
 			</tr>
 			Tran();
 		}
@@ -129,18 +131,31 @@ else
 {
 	<p>No transactions available.</p>
 }
+<br />
+<br />
+<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; gap: 20px;">
+	<div class="card">
+		<h3>Inflow</h3>
+		<label>Highest Inflow: @highestInflow</label>
+		<label>Lowest Inflow: @lowestInflow</label>
+		<label>Total count of inflow: @countInflow</label>
+	</div>
 
-<h3>Inflow</h3>
-<label>@highestInflow</label>
-<label>@lowestInflow</label>
+	<div class="card">
+		<h3>Outflow</h3>
+		<label>Highest outflow: @highestOutflow</label>
+		<label>Lowest outflow: @lowestOutflow</label>
+		<label>Total count of outflow: @countOutflow</label>
+	</div>
 
-<h3>Outflow</h3>
-<label>@highestOutflow</label>
-<label>@lowestOutflow</label>
-
-<h3>Debt</h3>
-<label>@highestDebt</label>
-<label>@lowestDebt</label>
+	<div class="card">
+		<h3>Debt</h3>
+		<label>Highest Debt: @highestDebt</label>
+		<label>Debt: @lowestDebt</label>
+		<label>Total count of debt: @countDebt</label>
+	</div>
+</div>
+<br />
 <br />
 
 
@@ -185,6 +200,9 @@ else
 	int lowestOutflow = 1000000;
 	int highestDebt = 0;
 	int lowestDebt = 1000000;
+	int countInflow = 0;
+	int countOutflow = 0;
+	int countDebt = 0;
 
 	string _title;
 	string _status;
@@ -202,16 +220,19 @@ else
 	public void TotalInFlow(int balance)
 	{
 		totalInflow += balance;
+		countInflow++;
 	}
 
 	public void TotalOutFlow(int balance)
 	{
 		totalOutflow += balance;
+		countOutflow++;
 	}
 
 	public void TotalDebt(int balance, int paid)
 	{
 		totalDebt += balance - paid;
+		countDebt++;
 	}
 
 	public void Tran()
@@ -279,6 +300,7 @@ else
 		totalInflow = 0;
 		totalOutflow = 0;
 		totalDebt = 0;
+
 		Current_Account.DropTable();
 		Current_Account.Filter(1, initialDate, finalDate, _typeInflow.ToString(), _typeOutflow.ToString(), _status, _tag, _order, _title);
 	}

@@ -50,6 +50,7 @@ public class Database_Selection
 						_inflowType = (option.Cash_Inflow)Enum.Parse(typeof(option.Cash_Inflow), reader.GetString(5)),
 						_source = reader.GetString(3),
 						_date = DateOnly.Parse(reader.GetString(4)),
+						_description = reader.GetString(7),
 						_tags = reader.GetString(8)
 					});
 				}
@@ -75,6 +76,7 @@ public class Database_Selection
 						_outflowType = (option.Cash_Outflow)Enum.Parse(typeof(option.Cash_Outflow), reader.GetString(5)),
 						_source = reader.GetString(3),
 						_date = DateOnly.Parse(reader.GetString(4)),
+						_description = reader.GetString(7),
 						_tags = reader.GetString(8)
 					});
 				}
@@ -84,7 +86,7 @@ public class Database_Selection
 
 	public void GetDebts(int userId)
 	{
-		string query = "SELECT d.amount, d.type, d.source, d.date, t.name FROM debts d JOIN tags t ON d.tagId = t.id WHERE userId = @userId";
+		string query = "SELECT d.amount, d.type, d.source, d.date, t.name, d.description FROM debts d JOIN tags t ON d.tagId = t.id WHERE userId = @userId";
 
 		using (var cmd = new SQLiteCommand(query, _connection))
 		{
@@ -100,7 +102,8 @@ public class Database_Selection
 						_debt = reader.GetString(1),
 						_source = reader.GetString(2),
 						_date = DateOnly.Parse(reader.GetString(3)),
-						_tags = reader.GetString(4)
+						_tags = reader.GetString(4),
+						_description = reader.GetString(5)
 					});
 				}
 			}
