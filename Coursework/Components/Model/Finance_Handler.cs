@@ -23,11 +23,10 @@ public class Finance_Handler
 		option.Cash_Outflow _type = option.Cash_Outflow.choose;
 
 		//debt
-		if (t._debt != null )
+		if (t._debt != null)
 		{
 			Database_Manager database_Manager = new Database_Manager();
 			database_Manager.IncreaseBalance(1, t._balance);
-			Console.WriteLine("Tag: " + t._index);
 			dm.InsertDebt(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._debt.ToString(), t._index, t._description);
 			return true;
 		}
@@ -53,6 +52,11 @@ public class Finance_Handler
 				}
 				else
 				{
+					Database_Manager database_Manager = new Database_Manager();
+					dm.InsertOutflow(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._outflowType.ToString(), t._index, t._description);
+					t._balance = t._balance - _balance;
+					database_Manager.DecreaseBalance(1, _balance);
+					dm.InsertDebt(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), "Pending", t._index, t._description);
 					return false;
 				}
 			}
@@ -82,8 +86,8 @@ public class Finance_Handler
 	//				old._used = old._balance;
 	//				use_balance -= old._balance;
 	//				old._debt = option.Debt.cleared;
- //               }
- //           }
+	//               }
+	//           }
 	//	}
 	//	t._used = t._balance - use_balance;
 	//}

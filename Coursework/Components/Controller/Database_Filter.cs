@@ -77,7 +77,7 @@ public class Database_Filter
 		WHERE o.userId = 1 
 			AND o.date BETWEEN @firstDate AND @lastDate
 			AND o.type LIKE CONCAT('%', @outflowType, '%')
-			AND t.name LIKE CONCAT('%', @TagName, '%')
+			AND t.name LIKE CONCAT('%', @TagName-, '%')
 			AND o.source LIKE CONCAT('%', @source, '%')
 		UNION ALL
 		SELECT date, amount, source, outstanding_amount, 'choose', 'choose', type, IFNULL(t.name, '')
