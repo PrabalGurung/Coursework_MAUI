@@ -2,19 +2,26 @@
 using System.Data.SqlClient;
 using System.Data.SQLite;
 
+/*--
+ * Handles debt management logic
+ * --*/
 public class Debt_Manager
 {
+	// declaration
 	private SQLiteConnection _connection;
 	string connectionString = "Data Source=mydatabase.db;Version=3;";
 
+	// no parameterized constructor
 	public Debt_Manager()
 	{
 		_connection = new SQLiteConnection(connectionString);
 		_connection.Open();
 	}
 
+	// Handles debt management during inflow period
 	public void Debt_Collector(int amount, int userId, int inflowId)
 	{
+		// Query needed for debt management logic
 		string updateQuery = "UPDATE debts SET outstanding_amount = outstanding_amount - @amount WHERE id = @id;";
 		string updateQueryZero = "UPDATE debts SET outstanding_amount = 0 WHERE id = @id;";
 		string updateQueryType = "UPDATE debts SET type = 'clear' WHERE id = @id;";
@@ -36,7 +43,7 @@ public class Debt_Manager
 					{
 						if (currentDebt <= amount)
 						{
-							// fully paid
+							// if the amount is fully paid
 							using (var updateCmd = new SQLiteCommand(updateQueryZero, _connection))
 							{
 								updateCmd.Parameters.AddWithValue("@id", debtId);
@@ -61,7 +68,7 @@ public class Debt_Manager
 						}
 						else
 						{
-							//partial reduction
+							//if the amount is partially paid
 							using (var updateCmd = new SQLiteCommand(updateQuery, _connection))
 							{
 								updateCmd.Parameters.AddWithValue("@amount", amount);
@@ -87,7 +94,6 @@ public class Debt_Manager
 					}
 				}
 			}
-			Console.WriteLine("Axa");
 			Database_Manager database_Manager = new Database_Manager();
 			database_Manager.IncreaseBalance(userId, amount);
 		}

@@ -1,17 +1,24 @@
 ﻿using System.Data.SQLite;
 using System.Xml.Linq;
 
+/* --
+ * Handles all insertion to database
+ * Handles updates in database
+ --*/
 public class Database_Manager
 {
+	// declaration
 	private SQLiteConnection _connection;
 	string connectionString = "Data Source=mydatabase.db;Version=3;";
 
+	// no parameterized constructor
 	public Database_Manager()
 	{
 		_connection = new SQLiteConnection(connectionString);
 		_connection.Open();
 	}
 
+	// Insert data in user table
 	public void InsertUser(string name, string password, int balance)
 	{
 		string query = "INSERT INTO users (name, password, balance) VALUES (@name, @password, @balance)";
@@ -24,6 +31,7 @@ public class Database_Manager
 		}
 	}
 
+	// Insert data in tag table
 	public void InsertDefaultTags()
 	{
 		string query = "INSERT INTO Tags(name) VALUES ('No Tags'), ('Yearly'), ('Monthly'), ('Food'), ('Drinks'), ('Clothes'), ('Gadgets'), ('Miscellaneous'), ('Fuel'), ('Rent'), ('EMI'), ('Party')";
@@ -33,6 +41,7 @@ public class Database_Manager
 		}
 	}
 
+	// Update balance in update user balance
 	public void UpdateUserBalance(int userId, int newBalance)
 	{
 		string query = "UPDATE users SET balance = @balance WHERE id = @userId";
@@ -44,6 +53,7 @@ public class Database_Manager
 		}
 	}
 
+	// Increases balance in given user 
 	public void IncreaseBalance(int userId, int amount)
 	{
 		string query = "UPDATE users SET balance = balance + @amount WHERE id = @userId";
@@ -57,6 +67,7 @@ public class Database_Manager
 		}
 	}
 
+	// Decrease balance in given user
 	public void DecreaseBalance(int userId, int amount)
 	{
 		string query = "UPDATE users SET balance = balance - @amount WHERE id = @userId";
@@ -68,6 +79,7 @@ public class Database_Manager
 		}
 	}
 
+	// Insert value inflows table
 	public int InsertInflow(int userId, int amount, string source, string date, string type, int index, string description)
 	{
 		string query = "INSERT INTO inflows (userId, amount, source, date, type, tagId, description) VALUES (@userId, @amount, @source, @date, @type, @tagId, @description)";
@@ -87,6 +99,7 @@ public class Database_Manager
 		return (int)lastInsertId;
 	}
 
+	// Insert value in outflows table
 	public void InsertOutflow(int userId, int amount, string source, string date, string type, int index, string description)
 	{
 		string query = "INSERT INTO outflows (userId, amount, source, date, type, tagId, description) VALUES (@userId, @amount, @source, @date, @type, @tagId, @description)";
@@ -103,6 +116,7 @@ public class Database_Manager
 		}
 	}
 
+	// Insert value in debt table
 	public void InsertDebt(int userId, int amount, string source, string date, string type, int index, string description)
 	{
 		Console.WriteLine("Tag:" + index);
@@ -121,19 +135,7 @@ public class Database_Manager
 		}
 	}
 
-	public void UpdateDebt(int debtId, int inFlowId, int inflowAmount, string newType)
-	{
-		string query = "UPDATE debts SET inflowId = @inFlowId, type = @type, clearedAmount = @clearedAmount WHERE id = @debtId";
-		using (var cmd = new SQLiteCommand(query, _connection))
-		{
-			cmd.Parameters.AddWithValue("@inFlowId", inFlowId);
-			cmd.Parameters.AddWithValue("@clearedAmount", inflowAmount);
-			cmd.Parameters.AddWithValue("@type", newType);
-			cmd.Parameters.AddWithValue("@debtId", debtId);
-			cmd.ExecuteNonQuery();
-		}
-	}
-
+	// Insert value in tags table
 	public void AddTags(string name)
 	{
 		string query = "INSERT INTO tags (name) VALUES (@name)";
@@ -144,6 +146,7 @@ public class Database_Manager
 		}
 	}
 
+	// Disconnect from database 
 	public void Close()
 	{
 		_connection.Close();

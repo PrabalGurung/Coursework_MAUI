@@ -2,17 +2,24 @@
 using System.Data.SQLite;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+/* --
+ * Handles selection from database
+ * Passes parameter to static list field present in Current_account.cs
+ --*/
 public class Database_Selection
 {
+	// declaration
 	private SQLiteConnection _connection;
 	string connectionString = "Data Source=mydatabase.db;Version=3;";
 
+	// no parameterized connection
 	public Database_Selection()
 	{
 		_connection = new SQLiteConnection(connectionString);
 		_connection.Open();
 	}
 
+	// Extracts users from users table with the given id
 	public int GetBalance(int userId)
 	{
 		string query = "SELECT * FROM users WHERE id = @userId;";
@@ -32,6 +39,7 @@ public class Database_Selection
 		}
 	}
 
+	// Extracts inflows from inflows table with the given id
 	public void GetInflows(int userId)
 	{
 		string query = "SELECT i.*, t.name FROM inflows i JOIN tags t ON i.tagId = t.id WHERE userId = @userId";
@@ -58,6 +66,7 @@ public class Database_Selection
 		}
 	}
 
+	// Extracts outflow from outflow table with given id
 	public void GetOutflows(int userId)
 	{
 		string query = "SELECT o.*, t.name FROM outflows o JOIN tags t ON o.tagId = t.id WHERE userId = @userId";
@@ -84,6 +93,7 @@ public class Database_Selection
 		}
 	}
 
+	// Extracts debt from debts table with given id
 	public void GetDebts(int userId)
 	{
 		string query = "SELECT d.amount, d.type, d.source, d.date, t.name, d.description FROM debts d JOIN tags t ON d.tagId = t.id WHERE userId = @userId";
@@ -110,6 +120,7 @@ public class Database_Selection
 		}
 	}
 
+	// Orders by date of transaction table
 	public void GetDate(int userId)
 	{
 		string query = @"
@@ -148,6 +159,7 @@ public class Database_Selection
 		}
 	}
 
+	// Extracts tags from tag table
 	public void GetTags()
 	{
 		string query = "SELECT name FROM tags";
@@ -167,6 +179,7 @@ public class Database_Selection
 		}
 	}
 
+	//  Extracts user, inflow and debt relation from dus table
 	public void GetDebtHistory()
 	{
 		string query = @"
@@ -200,6 +213,7 @@ public class Database_Selection
 
 	}
 
+	// Closes connection
 	public void Close()
 	{
 		_connection.Close();

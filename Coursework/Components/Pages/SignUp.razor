@@ -8,6 +8,15 @@
 	<h2>Sign Up</h2>
 	<input class="input-field" type="text" @bind="_username" placeholder="Username" required>
 	<input class="input-field" type="password" @bind="_password" placeholder="Password" required>
+	<select @bind="_currency">
+		<option value="">Choose Option</option>
+		<option value="NPR">NPR</option>
+		<option value="USD">USD</option>
+		<option value="RUS">RUS</option>
+		<option value="YEN">YEN</option>
+		<option value="YUAN">YUAN</option>
+	</select>
+
 	<button class="submit-btn" @onclick="OnClick" type="submit">Sign Up</button>
 
 	@if (!string.IsNullOrEmpty(_errorMessage))
@@ -21,6 +30,8 @@
 	public string _username;
 	public string _password;
 
+	public string _currency;
+
 	public string _errorMessage;
 
 	public void OnClick()
@@ -30,7 +41,7 @@
 		if (string.Equals(_username, "Skybird") && string.Equals(_password, "123"))
 		{
 			LogIn.log = true;
-
+			LogIn.currency = _currency;
 			Current_Account._currentAccount = new Finance_Handler(_username);
 			Navigation.NavigateTo("/Home");
 

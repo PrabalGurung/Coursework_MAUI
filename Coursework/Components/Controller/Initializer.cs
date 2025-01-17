@@ -3,6 +3,10 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.Xml.Linq;
 
+/*-- 
+ * Checks if database exist or not
+ * If database does not exist handles
+ * --*/
 public class Initializer
 {
 	string connectionString = "Data Source=mydatabase.db;Version=3;";

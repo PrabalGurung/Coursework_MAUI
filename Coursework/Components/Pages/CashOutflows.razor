@@ -12,6 +12,7 @@
 	<br />
 	<input class="input-field" type="date" @bind="_date" placeholder="Date" required>
 	<br />
+
 	<select @bind="_type">
 		@foreach (var cashInflow in Enum.GetNames(typeof(option.Cash_Outflow)))
 		{

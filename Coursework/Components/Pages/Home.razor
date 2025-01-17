@@ -4,7 +4,7 @@
 <PageTitle>Home</PageTitle>
 
 <h3>Welcome, @Current_Account._currentAccount._name</h3>
-<p>Your Current Balance: @Current_Account._currentAccount._balance</p>
+<p>Your Current Balance: @LogIn.currency @Current_Account._currentAccount._balance</p>
 
 @if (!advanceSearch)
 {
@@ -75,7 +75,7 @@
 		@foreach (var transaction in Current_Account._currentAccount._transaction)
 		{
 			<tr>
-				<td>@transaction._balance</td>
+				<td>@LogIn.currency @transaction._balance</td>
 				<td>@transaction._date</td>
 				@if (transaction._inflowType != option.Cash_Inflow.choose)
 				{
@@ -177,8 +177,8 @@ else
 				<td>@history.user</td>
 				<td>@history.inflow</td>
 				<td>@history.debt</td>
-				<td>@history.userAmount</td>
-				<td>@history.outstandingAmount</td>
+				<td>@LogIn.currency @history.userAmount</td>
+				<td>@LogIn.currency @history.outstandingAmount</td>
 				<td>@history.source</td>
 			</tr>
 		}
@@ -209,8 +209,8 @@ else
 	string _order;
 	string _tag;
 
-	DateOnly initialDate;
-	DateOnly finalDate;
+	DateOnly initialDate = DateOnly.FromDateTime(DateTime.Today);
+	DateOnly finalDate = DateOnly.FromDateTime(DateTime.Today);
 
 	bool advanceSearch = false;
 

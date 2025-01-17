@@ -35,7 +35,6 @@ public class Finance_Handler
 			//inflow
 			if (t._outflowType == _type)
 			{
-
 				int iflowId = dm.InsertInflow(1, t._balance, t._source, t._date.ToString("yyyy-MM-dd"), t._inflowType.ToString(), t._index, t._description);
 				DebtTrack(t._balance, iflowId);
 				return true;
@@ -63,34 +62,6 @@ public class Finance_Handler
 		}
 	}
 
-	//public void DebtTrack(Transaction t)
-	//{
-	//	int use_balance = t._balance;
-	//	foreach (var old in _transaction)
-	//	{
-	//		if (old._debt == option.Debt.pending)
-	//		{ 
-	//			if (old._balance - use_balance - old._used == 0)
-	//			{
-	//				old._used += use_balance;
-	//				t._used = t._balance;
-	//				old._debt = option.Debt.cleared;
-	//				return;
-	//			} else if (old._balance - use_balance > 0){
-	//				old._used = old._used + use_balance;
-	//				t._used = use_balance;
-	//				return;
-	//			} else if (old._balance - use_balance < 0)
-	//			{
-	//				t._used += old._balance;
-	//				old._used = old._balance;
-	//				use_balance -= old._balance;
-	//				old._debt = option.Debt.cleared;
-	//               }
-	//           }
-	//	}
-	//	t._used = t._balance - use_balance;
-	//}
 	public void UpdateBalance()
 	{
 		Database_Selection database_Selection = new Database_Selection();

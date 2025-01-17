@@ -1,66 +1,30 @@
 ﻿
 using System.Data.SQLite;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
+/*-- 
+ * Handles all filtration from database
+ * Passes parameter to static list field present in Current_account.cs
+ * --*/
 public class Database_Filter
 {
+	//declaration
 	private SQLiteConnection _connection;
 	string connectionString = "Data Source=mydatabase.db;Version=3;";
 
+	//no parameterized constructor
 	public Database_Filter()
 	{
 		_connection = new SQLiteConnection(connectionString);
 		_connection.Open();
 	}
+
+	//closes connection
 	public void Close()
 	{
 		_connection.Close();
 	}
 
-	public void FilterType(int userId, string type)
-	{
-		string query = @"
-			SELECT date, amount, source, NULL, type, NULL, NULL
-			FROM inflows 
-			WHERE userId = @userId AND type = @type UNION
-			SELECT date, amount, source, NULL, NULL, type, NULL
-			FROM outflows 
-			WHERE userId = @userId AND type = @type UNION
-			SELECT date, amount, source, outstanding_amount, NULL, NULL, type
-			FROM debts
-			WHERE userId = @userId AND type = @type
-			ORDER BY date;
-		";
-
-		using (var cmd = new SQLiteCommand(query, _connection))
-		{
-			cmd.Parameters.AddWithValue("@userId", userId);
-			cmd.Parameters.AddWithValue("@type", type);
-
-			using (var reader = cmd.ExecuteReader())
-			{
-				while (reader.Read())
-				{
-					Current_Account._currentAccount._transaction.Add(new Transaction
-					{
-						_balance = reader.GetInt32(1),
-						_source = reader.GetString(2),
-						_outflowType = (option.Cash_Outflow)Enum.Parse(typeof(option.Cash_Outflow), reader.GetString(4)),
-						_inflowType = (option.Cash_Inflow)Enum.Parse(typeof(option.Cash_Inflow), reader.GetString(5)),
-						_debt = reader.GetString(6),
-						_used = reader.GetInt32(3),
-						_date = DateOnly.Parse(reader.GetString(0))
-					});
-				}
-			}
-		}
-	}
-
-	public void FilterTags(int userId, string tags)
-	{
-		
-	}
-
+	//Filter, Search and sorts according to value given
     public void FilterSearch(int userId, DateOnly firstDate, DateOnly lastDate, string incomeType, string outcomeType, string debtType, string tags, string order, string title)
     {
         string query = @"
@@ -88,7 +52,6 @@ public class Database_Filter
 			AND t.name LIKE CONCAT('%', @TagName, '%')
 			AND d.source LIKE CONCAT('%', @source, '%')
 		" + order;
-		Console.WriteLine(query);
 
         using (var cmd = new SQLiteCommand(query, _connection))
         {
