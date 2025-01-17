@@ -30,7 +30,7 @@
 
 @code {
 	public int _amount;
-	public DateOnly _date;
+	public DateOnly _date = DateOnly.FromDateTime(DateTime.Today);
 	public string _source;
 	public bool success;
 	public string _status = "Pending";
